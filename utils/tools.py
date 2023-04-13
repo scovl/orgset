@@ -5,6 +5,7 @@ import tarfile
 import configparser
 import shutil
 import urllib.request
+import requests
 
 from check_os import checkOs
 
@@ -50,19 +51,29 @@ class ToolsInstall:
             bash_profile_path = os.path.expanduser("~/.bash_profile")
             with open(bash_profile_path, "a") as f:
                 f.write("\n# Configuração do Maven\n")
-                f.write(f'export PATH=$PATH:{dest}/{maven_version}/bin\n')
-                f.write(f'export M2_HOME={dest}/{maven_version}\n')
+                f.write(f'export PATH=$PATH:{os.path.join(dest,maven_version,"bin")}\n')
+                f.write(f'export M2_HOME={os.path.join(dest,maven_version)}\n')
             os.system("source ~/.bash_profile")
         elif checkOs.detect_os() == "Windows":
             with open(os.path.join(os.environ["USERPROFILE"], "AppData", "Local", "Microsoft",
                                    "WindowsApps", "maven.cmd"), "w") as f:
                 f.write(
-                    f'@echo off\nset "M2_HOME={dest}\\{maven_version}"\nset "PATH=%PATH%;%M2_HOME%\\bin"\n"%*"\n')
-            os.system(f'setx PATH "%PATH%;{dest}\\{maven_version}\\bin"')
+                    f'@echo off\nset "M2_HOME={os.path.join(dest,maven_version)}"\nset "PATH=%PATH%;%M2_HOME%\\bin"\n"%*"\n')
+            os.system(f'setx PATH "%PATH%;{os.path.join(dest,maven_version,"bin")}"')
 
     def install_idea(self):
-        self.check_os()
-
+        if checkOs.detect_os() == "Linux":
+            # Install JDK and PyCharm dependencies
+            os.system("sudo apt update && sudo apt -y upgrade")
+            os.system(
+                "sudo apt -y install default-jdk ttf-dejavu fontconfig curl")
+        elif checkOs.detect_os() == "Windows":
+            windows_path = os.path.join(os.environ['ProgramFiles'], 'Java')\n            if not os.path.exists(windows_path):
+                os.makedirs(windows_path)
+            with open(os.path.join(windows_path, 'jdk-8u291-windows-x64.exe'), 'wb') as f:
+                r = requests.get(
+                    'https://mirror.nbtelecom.com.br/apache/maven/maven-3/3.8.3/binaries/apache-maven-3.8.3-bin.zip')
+                f.write(r.content)\n        self.config.read('config.cfg')
         intellij_settings_path = self.config.get(
             'DEFAULT', 'intellij_settings_path')
 
@@ -71,10 +82,8 @@ class ToolsInstall:
                 f"O diretório {intellij_settings_path} já existe. O IntelliJ IDEA Community Edition não será instalado novamente.")
             return
 
-        # Define a URL de download do IntelliJ IDEA Community Edition de acordo com o sistema operacional
-        if checkOs.detect_os() == "Linux":
-            url = "https://download.jetbrains.com/idea/ideaIC-latest.tar.gz"
-        elif checkOs.detect_os() == "Windows":
+        # Define a URL de download do IntelliJ IDEA Community Edition de acordo com o sistema operacional\n        if checkOs.detect_os() == "Linux":
+            url = "https://download.jetbrains.com/idea/ideaIC-latest.tar.gz\"\n        elif checkOs.detect_os() == "Windows":
             url = "https://download.jetbrains.com/idea/ideaIC-latest.win.zip"
         elif checkOs.detect_os() == "Darwin":
             url = "https://download.jetbrains.com/idea/ideaIC-latest.dmg"
@@ -87,14 +96,14 @@ class ToolsInstall:
         if checkOs.detect_os() == "Linux":
             idea_dir = os.path.expanduser("~/idea-IC")
             if os.path.exists(idea_dir):
-                shutil.rmtree(idea_dir)
+                os.rmdir(idea_dir)
             os.makedirs(idea_dir)
             os.system(
                 f"tar -xzf {tmp_file.name} -C {idea_dir} --strip-components=1")
         elif checkOs.detect_os() == "Windows":
             idea_dir = os.path.expanduser("~/idea-IC")
             if os.path.exists(idea_dir):
-                shutil.rmtree(idea_dir)
+                os.rmdir(idea_dir)
             os.makedirs(idea_dir)
             with zipfile.ZipFile(tmp_file.name, "r") as zip_ref:
                 zip_ref.extractall(idea_dir)
