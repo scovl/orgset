@@ -55,7 +55,7 @@ class OrgSet:
         # Copia o template do arquivo idea.properties e renderiza utilizando Jinja2
         env = jinja2.Environment(loader=jinja2.PackageLoader(__name__, 'templates'))
         template = env.get_template('idea.properties.j2')
-        rendered_template = template.render(checkOs.detect_os()
+        rendered_template = template.render(checkOs.detect_os())
 
         # copia o arquivo idea.properties.j2 renderizado acima em self.intellij_settings_path
         settings_path = os.path.join(self.intellij_settings_path, "idea.properties")
