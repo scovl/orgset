@@ -57,4 +57,6 @@ Se você deseja contribuir para o projeto OrgSet, siga os seguintes passos:
 
 * Faça um fork deste repositório para sua própria conta no GitHub.
 
-Clone o repositório do seu fork em sua máquina local, crie uma nova branch e faça as alterações necessárias e por fim, envie um pull request para o repositório original.
+Clone o repositório do seu fork em sua máquina local, crie uma nova branch e faça as alterações necessárias e por fim, envie um pull request para o repositório original. Siga o modelo gitflow para criar as branches.
+
+Para mais informações sobre gitflow, acesse o link: **[https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow](https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow)**.
