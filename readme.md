@@ -2,38 +2,54 @@
 
 OrgSet é uma ferramenta de linha de comando desenvolvida em Python que permite configurar o ambiente de desenvolvimento de acordo com o padrão da organização de maneira simples. A classe suporta os sistemas operacionais Linux e Windows e realiza as seguintes tarefas:
 
-* Configura o arquivo settings.xml do Maven para o ambiente de desenvolvimento;
-* Configura o proxy HTTP no arquivo `.bash_profile` (Linux) ou nas configurações do VSCode (Windows);
-* Configura as variáveis de ambiente necessárias para o ambiente de desenvolvimento.
+* Configura o arquivo `settings.xml` do Maven para o ambiente de desenvolvimento.
+* Configura o proxy HTTP no arquivo `.bash_profile` no Linux e Mac.
+* Configura o vscode com o Proxy HTTP.
+* Configura o IntelliJ IDEA com o Proxy HTTP.
+
+### Pré-requisitos
+
+* Python 3.6 ou superior.
+* Maven 3.6.3 ou superior.
+* Git 2.25.1 ou superior.
+
+```bash
+pip install jinja2 configparser --user 
+```
 
 ### Como usar
 
-Para usar a classe OrgSet, siga os seguintes passos:
-
-Clone este repositório em sua máquina local:
+Clone o repositório do projeto, entre na pasta e execute o seguinte comando:
 
 ```bash
-git clone https://github.com/seu_nome_de_usuário/orgset.git
+python3 orgset.py
+```
+> Edite o orgset.py para executar apenas as funções que deseja ao fim do arquivo. Exemplo:
+
+```python
+orgset = OrgSet()
+orgset.check_os()
+orgset.config_maven_settings()
+orgset.config_http_proxy()
+orgset.config_vscode_proxy()
+orgset.config_intellij_proxy()
+
 ```
 
-Entre na pasta orgset:
+## Configuração
+
+O arquivo `config.cfg` deve conter as informações necessárias para configurar os proxies dos programas. O formato do arquivo é o seguinte:
 
 ```bash
-cd orgset
+[Config]
+m2_path = /caminho/para/a/pasta/.m2
+HTTP_PROXY = http://<usuario>:<senha>@<endereco>:<porta>
+HTTPS_PROXY = https://<usuario>:<senha>@<endereco>:<porta>
+vscode_settings_path = /caminho/para/a/pasta/.config/Code/User/
+intellij_settings_path = /caminho/para/a/pasta/.IntelliJIdea<versao>/config/
 ```
 
-Execute o arquivo main.py:
-
-```bash
-python main.py
-```
-
-Siga as instruções na tela para configurar o ambiente de desenvolvimento. Note que algumas das tarefas realizadas pela classe OrgSet podem exigir privilégios de administrador, por isso é recomendável executar o comando como administrador (no Windows) ou com o prefixo sudo (no Linux).
-Requisitos A classe OrgSet requer Python 3.x e o jinja2 para funcionar. Você pode instalar os pacotes necessários usando o seguinte comando:
-
-```bash
-pip install jinja2 --user
-```
+---
 
 ## Contribuição
 
